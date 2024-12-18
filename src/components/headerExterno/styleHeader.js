@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const HeaderContainer = styled.header`
-    background-color: rgba(0, 0, 0, 0.5);
+    /* background-color: rgba(0, 0, 0, 0.5); */
     padding-right: 5%;
     padding-left: 5%;
     width: 100vw;
@@ -43,8 +43,9 @@ export const BotaoContainer = styled.div`
     align-items: center;
 `;
 
-export const BotaoLogin = styled.button`
-
+export const BotaoLogin = styled.button.withConfig({
+    shouldForwardProp: (prop) => prop !== 'isScrolled'
+})`
     width: 9rem;
     height: 2rem;
     background-color: transparent;
@@ -57,6 +58,9 @@ export const BotaoLogin = styled.button`
     border-radius: 5px;
     cursor: pointer;
 
+    ${props => props.isScrolled && css`
+            color: black ;
+        `}
 `;
 
 export const BotaoCadastro = styled.button`
@@ -73,22 +77,29 @@ export const BotaoCadastro = styled.button`
     cursor: pointer;
 `;
 
-export const NavBar = styled.div`
+export const NavBar = styled.div.withConfig({
+    shouldForwardProp: (prop) => prop !== 'isScrolled'
+})`
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
     width: 35%;
     height: 100%;
-    /* border: 2px solid yellow; */
+
+    margin-left: 10rem;
 
     color: white;
-
-    a{
+    a {
         text-decoration: none;
         color: white;
         font-family: "Roboto Condensed", serif;
         font-size: 20px;
         font-weight: 300;
+
+        
+        ${props => props.isScrolled && css`
+            color: black;
+        `}
     }
 `;

@@ -1,24 +1,25 @@
 import { BotaoCadastro, BotaoContainer, BotaoLogin, HeaderContainer, LogoContainer, LogoHeader, NavBar } from "./styleHeader";
-import logo from "../../assets/logo2.png";
+import logo2 from "../../assets/logo2.png";
+import logo from "../../assets/logo.png";
 
-function HeaderExterno() {
+function HeaderExterno({ isScrolled }) {
+    console.warn(isScrolled)
     return (
-
         <HeaderContainer>
             <LogoContainer>
-                <LogoHeader src={logo} alt="Logo" />
+                <LogoHeader src={isScrolled ? logo : logo2} alt="Logo" />
             </LogoContainer>
 
 
-            <NavBar>
+            <NavBar isScrolled={isScrolled}>
                 <a href="#home">Home</a>
+                <a href="#contato">Valores</a>  
                 <a href="#sobre">Sobre</a>
-                <a href="#contato">Valores</a>
             </NavBar>
 
             <BotaoContainer>
                 <BotaoCadastro>Cadastre-se</BotaoCadastro>
-                <BotaoLogin>Acessar conta</BotaoLogin>
+                <BotaoLogin isScrolled={isScrolled} >Acessar conta</BotaoLogin>
             </BotaoContainer>
             
         </HeaderContainer>
