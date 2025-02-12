@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import HeaderExterno from "../../components/headerExterno/headerExterno";
-import {Background, BackgroundCards, BotaoConheca, CardContainer, ContainerConteudo, MainContainer, SubTitulo, Titulo}  from "./homeStyle";
+import {Background, Background2, BackgroundCards, BotaoConheca, CardContainer, ContainerBackground2, ContainerConteudo, MainContainer, SubTitulo, Titulo}  from "./homeStyle";
 import {HomeContainer2} from "./homeStyle";
 import image from '../../assets/background-home.png';
 import { use } from "react";
@@ -8,6 +8,7 @@ import CardValores from "../../components/cardValores/CardValores";
 import missao from "../../assets/missao.svg";
 import visao from "../../assets/visao.svg";
 import valores from "../../assets/valores.svg";
+import CarrosselHome from "../../components/carrosselHome/CarrosselHome";
 
 function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,7 +35,7 @@ function Home() {
   return (
     <div>
         <HeaderExterno isScrolled={isScrolled} />
-        <Background style={{ backgroundImage: `url(${image})` }}>
+        <Background>
           <MainContainer>
               <ContainerConteudo>
                 <SubTitulo>Seja bem-vindo ao nosso site!</SubTitulo>
@@ -56,7 +57,16 @@ function Home() {
 
         </BackgroundCards>
 
-        <HomeContainer2></HomeContainer2>
+        <Background2>
+          <ContainerBackground2>
+            <p>Fomos criados por um Deus grande para fazer boas obras !</p>
+          </ContainerBackground2>
+        </Background2>
+
+        <HomeContainer2> 
+          <div>oi</div>
+          <CarrosselHome></CarrosselHome>
+        </HomeContainer2>
     </div>
   );
 }

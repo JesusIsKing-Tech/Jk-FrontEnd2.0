@@ -1,0 +1,43 @@
+.swiper {
+  width: 70%;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  opacity: 0.5;
+  height: 27rem;
+  
+  transition: transform 0.3s !important;
+  
+}
+.swiper-slide-active {
+  transform: scale(1.3) !important; /* Aumenta o slide ativo */
+  z-index: 2; /* Garante que o slide ativo esteja acima dos outros */
+  opacity: 1;
+}
+
+.swiper-slide img {
+    border-radius: 20px;
+    display: block;
+    width: 100%;
+  }
+
+  .swiper-button-next,
+.swiper-button-prev {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 50%;
+
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: white;
+}
+
+
+

@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-
-
-const background = "../../assets/background-home.jpg";
+import image from '../../assets/background-home.png';
+import image2 from '../../assets/background-home2.png';
 
 
 export const HomeContainer2 = styled.div`
@@ -10,8 +9,9 @@ export const HomeContainer2 = styled.div`
     height: 100vh;
     `;
 
+
 export const Background = styled.div`
-    background-image: url(${background});
+    background-image: url(${image});
     background-size: cover;
     background-position: center;
     width: 100vw;
@@ -103,7 +103,7 @@ export const BackgroundCards = styled.div`
         justify-content: center;
         align-items: center;
         padding: 5%;
-
+        
         font-family: "Roboto Condensed", serif;
         font-size: 30px;
         font-weight: bold;
@@ -118,6 +118,32 @@ export const CardContainer = styled.div`
     height: 80%;
     margin: 1rem;
     padding: 1rem;
+    `;
 
+export const Background2 = styled.div`
 
+    background-image: url(${image2});
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: 31rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
+export const ContainerBackground2= styled.div`
+   width: 85%;
+   height: 100%;
+   display: flex;
+   justify-content: start;
+   align-items: center;
+
+    p{
+        font-family: "Roboto Condensed", serif;
+        font-size: 5rem;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+    }
+    `;
+    
