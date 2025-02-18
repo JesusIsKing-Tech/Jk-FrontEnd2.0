@@ -5,18 +5,16 @@ export const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #101010;
+  background-color: #000;
   padding: 10px 20px;
   color: #fff;
-  height: 60px;
+  height: 9vh;
 `;
 
 export const HeaderWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
 `;
 
 export const NavLinks = styled.div`
@@ -26,16 +24,18 @@ export const NavLinks = styled.div`
 
 export const NavLink = styled(RouterNavLink)`
   text-decoration: none;
-  color: #fff;
-  font-weight: 500;
-  text-transform: uppercase;
-
+  color: #f0f0f0;
+  /* font-weight: 350; */
+  font-size:20px;
+  font-weight: 300;
+  /* text-transform: uppercase; */
+  font-family: "Roboto Condensed", serif;
   &.active {
-    color: #1e90ff; /* Destaque para o link ativo */
+    color: #0e48af; /* Destaque para o link ativo */
   }
 
   &:hover {
-    color: #1e90ff;
+    color: #0e48af;
   }
 `;
 
@@ -45,12 +45,14 @@ export const LogoutButton = styled.button`
   gap: 8px;
   background: none;
   border: none;
-  color: #1e90ff;
+  color: #0e48af;
   font-size: 16px;
+  font-family: "Roboto Condensed", serif;
+
   cursor: pointer;
 
   &:hover {
-    color: #1c86ee;
+    /* color: #1c86ee; */
   }
 `;
 
@@ -58,7 +60,9 @@ export const ProfileSection = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #fff;
-  font-weight: 500;
-  text-transform: uppercase;
+  color: #f0f0f0;
+  font-weight: 350;
+  /* text-transform: uppercase; */
+  font-family: "Roboto Condensed", serif;
+  cursor: pointer;
 `;

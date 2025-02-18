@@ -7,25 +7,25 @@ function HeaderLogado() {
             <HeaderWrapper>
                 {/* Botão de Sair */}
                 <LogoutButton>
-                    <FaSignOutAlt /> Sair
+                    <FaSignOutAlt /> SAIR
                 </LogoutButton>
 
                 {/* Links Centrais */}
                 <NavLinks>
                     <NavLink to="/noticias" className={({ isActive }) => (isActive ? "active" : "")}>
-                        Notícias
+                            NOTÍCIAS
                     </NavLink>
                     <NavLink to="/estoque" className={({ isActive }) => (isActive ? "active" : "")}>
-                        Estoque
+                        ESTOQUE
                     </NavLink>
                     <NavLink to="/doe" className={({ isActive }) => (isActive ? "active" : "")}>
-                        Doe
+                        DOE
                     </NavLink>
                 </NavLinks>
 
                 {/* Perfil à Direita */}
                 <ProfileSection>
-                    <FaUser /> Perfil
+                    <FaUser /> PERFIL
                 </ProfileSection>
             </HeaderWrapper>
         </HeaderContainer>
