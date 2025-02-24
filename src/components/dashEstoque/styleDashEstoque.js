@@ -14,7 +14,7 @@ export const Container = styled.div`
   height: 85%;
   padding: 70px;
   /* margin: 20px; */
-  width: auto;
+  width: 25vw;
 
 `;
 

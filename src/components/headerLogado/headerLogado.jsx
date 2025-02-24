@@ -1,4 +1,4 @@
-import { HeaderContainer, NavLinks, NavLink, LogoutButton, ProfileSection, HeaderWrapper } from "./styleHeaderLogado";
+import { HeaderContainer, NavLinks, NavLink, LogoutButton, ProfileSection, HeaderWrapper,Perfil } from "./styleHeaderLogado";
 import { FaSignOutAlt, FaUser } from "react-icons/fa";
 
 function HeaderLogado() {
@@ -19,13 +19,14 @@ function HeaderLogado() {
                         ESTOQUE
                     </NavLink>
                     <NavLink to="/doe" className={({ isActive }) => (isActive ? "active" : "")}>
-                        DOE
+                         RETIRAR DOAÇÕES
                     </NavLink>
                 </NavLinks>
 
-                {/* Perfil à Direita */}
                 <ProfileSection>
+                    <Perfil to ="/perfil" className={({ isActive }) => (isActive ? "active" : "")}>
                     <FaUser /> PERFIL
+                    </Perfil>
                 </ProfileSection>
             </HeaderWrapper>
         </HeaderContainer>

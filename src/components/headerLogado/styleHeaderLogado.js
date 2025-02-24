@@ -39,6 +39,17 @@ export const NavLink = styled(RouterNavLink)`
   }
 `;
 
+export const Perfil = styled(RouterNavLink)`
+  text-decoration: none;
+  color: #0e48af;
+  /* font-weight: 350; */
+  font-size:20px;
+  font-weight: 300;
+  /* text-transform: uppercase; */
+  font-family: "Roboto Condensed", serif;
+ 
+`;
+
 export const LogoutButton = styled.button`
   display: flex;
   align-items: center;

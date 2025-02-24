@@ -7,15 +7,9 @@ function Estoque() {
         <>
             <HeaderLogado/>
             <Background>
-                
                 <FoodGrid/>
-                
-                
                 <DashEstoque/>
-
-            
             </Background>
-
         </>
     );
 }
