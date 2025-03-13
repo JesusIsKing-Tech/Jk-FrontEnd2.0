@@ -7,6 +7,8 @@ import Estoque from "./pages/estoque/estoque";
 // import Noticias from "./pages/noticias/noticias";
 import Doe from "./pages/retirar doacoes/doe";
 import Perfil from "./pages/perfil/perfil"
+import Painel from "./pages/painel/painel"
+import Noticias from "./pages/noticias/Noticias";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -18,6 +20,8 @@ createRoot(document.getElementById("root")).render(
         <Route path="/estoque" element={<Estoque />} />
         <Route path="/doe" element={<Doe />} />
         <Route path="/perfil" element={<Perfil />} />
+        <Route path="/painel" element={<Painel />} />
+        <Route path="/noticias" element={<Noticias />} />
       </Routes>
     </Router>
   </StrictMode>

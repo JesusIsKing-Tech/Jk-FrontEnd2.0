@@ -21,6 +21,9 @@ function HeaderLogado() {
                     <NavLink to="/doe" className={({ isActive }) => (isActive ? "active" : "")}>
                          RETIRAR DOAÇÕES
                     </NavLink>
+                    <NavLink to="/painel" className={({ isActive }) => (isActive ? "active" : "")}>
+                         PAINEL
+                    </NavLink>
                 </NavLinks>
 
                 <ProfileSection>
