@@ -1,12 +1,15 @@
 import React from 'react';
-import { Button, Icon } from './styleFiltroDash';
+import { InputWrapper, Input, Icon } from './styleFiltroDash';
 
-function FiltroDash({texto}) {
+function FiltroDash({ texto, onChange }) {
   return (
-    <Button>
+    <InputWrapper>
       <Icon />
-      {texto}
-    </Button>
+      <Input 
+        placeholder={texto}
+        onChange={onChange}
+      />
+    </InputWrapper>
   );
 }
 

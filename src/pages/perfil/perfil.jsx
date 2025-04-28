@@ -30,7 +30,7 @@ const initialData = {
         cidade: "Santo André",
         estado: "São Paulo"
     },
-    imageUrl: "../../assets/arroz.png"
+    imageUrl: "https://www.pibvm.com.br/mt-content/uploads/2024/01/photo-from-junior-7.jpg"
 };
 
 function Perfil() {
@@ -92,7 +92,7 @@ function Perfil() {
             <ProfileContainer>
                 <Sidebar>
                     <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-around", marginTop: "50px" }} >
-                        <ProfileImage src={arroz} alt="Profile" />
+                        <ProfileImage src={"https://www.pibvm.com.br/mt-content/uploads/2024/01/photo-from-junior-7.jpg"} alt="Profile" />
                     </div>
                     {editandoPerfil && (
                         <div style={{ display: "flex", justifyContent: "space-around", width: "80%",marginBottom:"30px" }}>

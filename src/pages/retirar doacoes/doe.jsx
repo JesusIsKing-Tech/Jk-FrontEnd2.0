@@ -96,7 +96,7 @@ function Doe() {
                                             <Celula>{membro.dataNasc}</Celula>
                                             <Celula>{membro.telefone}</Celula>
                                             <Celula>
-                                                <input type="radio" name="selecionar" />
+                                                <input type="radio" name="selecionar" style={{cursor:"pointer"}}/>
                                             </Celula>
                                         </Linha>
                                     ))}

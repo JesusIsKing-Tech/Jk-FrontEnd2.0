@@ -1,20 +1,24 @@
-import styled from 'styled-components';
-import { FaFilter } from 'react-icons/fa';
+import styled from "styled-components";
+import { FaSearch } from "react-icons/fa";
 
-export const Button = styled.button`
-  display: inline-flex;
+export const InputWrapper = styled.div`
+  display: flex;
   align-items: center;
-  background-color: #292A2D;
-  color: #FFFFFF;
-  border: 1px solid #FFFFFF;
-  border-radius: 5px;
-  padding: 10px 20px;
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  cursor: pointer;
+  background-color: #f1f1f1;
+  padding: 8px 12px;
+  border-radius: 8px;
 `;
 
-export const Icon = styled(FaFilter)`
-  margin-right: 8px;
-  color: #3B82F6;
+export const Input = styled.input`
+  border: none;
+  background: transparent;
+  margin-left: 8px;
+  outline: none;
+  font-size: 16px;
+  width: 100%;
+`;
+
+export const Icon = styled(FaSearch)`
+  color: #2563eb;
+  font-size: 18px;
 `;

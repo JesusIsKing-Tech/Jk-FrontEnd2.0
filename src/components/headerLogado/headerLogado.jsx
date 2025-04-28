@@ -12,9 +12,9 @@ function HeaderLogado() {
 
                 {/* Links Centrais */}
                 <NavLinks>
-                    <NavLink to="/noticias" className={({ isActive }) => (isActive ? "active" : "")}>
+                    {/* <NavLink to="/noticias" className={({ isActive }) => (isActive ? "active" : "")}>
                             NOTÍCIAS
-                    </NavLink>
+                    </NavLink> */}
                     <NavLink to="/estoque" className={({ isActive }) => (isActive ? "active" : "")}>
                         ESTOQUE
                     </NavLink>

@@ -8,17 +8,59 @@ const prayerRequests = [
     name: 'John Doe',
     email: 'john@example.com',
     phone: '123-456-7890',
-    details: 'Please pray for healing and strength.',
+    details: 'Por favor, ore por cura e fortalecimento.',
   },
   {
     id: 2,
     name: 'Jane Smith',
     email: 'jane@example.com',
     phone: '098-765-4321',
-    details: 'Pray for peace and guidance in my decisions.Pray for peace and guidance in my decisions.Pray for peace and guidance in my decisions.',
+    details: 'Ore por paz e orientação nas minhas decisões. Ore por paz e orientação nas minhas decisões. Ore por paz e orientação nas minhas decisões.',
   },
-  // Add more requests as needed
+  {
+    id: 3,
+    name: 'Michael Johnson',
+    email: 'michael@example.com',
+    phone: '321-654-0987',
+    details: 'Peço orações pela minha família e pela nossa união.',
+  },
+  {
+    id: 4,
+    name: 'Emily Davis',
+    email: 'emily@example.com',
+    phone: '654-321-7890',
+    details: 'Ore por sabedoria no meu trabalho e novos projetos.',
+  },
+  {
+    id: 5,
+    name: 'David Brown',
+    email: 'david@example.com',
+    phone: '789-012-3456',
+    details: 'Preciso de orações para superar momentos difíceis.',
+  },
+  {
+    id: 6,
+    name: 'Sarah Wilson',
+    email: 'sarah@example.com',
+    phone: '567-890-1234',
+    details: 'Peço oração pela saúde dos meus pais.',
+  },
+  {
+    id: 7,
+    name: 'Chris Taylor',
+    email: 'chris@example.com',
+    phone: '890-123-4567',
+    details: 'Ore por proteção nas viagens e novos caminhos.',
+  },
+  {
+    id: 8,
+    name: 'Laura Martinez',
+    email: 'laura@example.com',
+    phone: '456-789-0123',
+    details: 'Peço oração para vencer minhas inseguranças.',
+  },
 ];
+
 
 function PedidoOracao() {
   const [selectedRequest, setSelectedRequest] = useState(null);
