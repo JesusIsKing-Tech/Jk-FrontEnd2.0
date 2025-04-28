@@ -10,10 +10,27 @@ import 'swiper/css/navigation';
 
 import './styles.css';
 
+// import images
+import logoJesusKing from '../../assets/JIK-LOGO.png';
+import logoPibvm from '../../assets/PIBVM-LOGO.png';
+import logoOnu from '../../assets/ONU-LOGO.jpg';
+import controleEstoque from '../../assets/controle-estoque.png';
+
 // import required modules
 import { EffectCoverflow, Navigation, Pagination } from 'swiper/modules';
 
-export default function App() {
+export default function App({ onSlideChange }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleSlideChange = (swiper) => {
+    const newIndex = swiper.realIndex;
+    console.log(newIndex);
+    setActiveIndex(newIndex);
+    if (onSlideChange) {
+      onSlideChange(newIndex);
+    }
+  };
+
   return (
     <>
       <Swiper
@@ -21,6 +38,7 @@ export default function App() {
         grabCursor={true}
         centeredSlides={true}
         slidesPerView={3}
+        initialSlide={0}
         coverflowEffect={{
           rotate: 50,
           stretch: 0,
@@ -30,36 +48,28 @@ export default function App() {
         }}
         spaceBetween={50}
         loop={true}
-        pagination={true}
+        // pagination={true}
         navigation={true}
         modules={[EffectCoverflow, Pagination, Navigation]}
         className="mySwiper"
+        onSlideChange={ handleSlideChange }
         // slideActiveClass="active-slide"
       >
         <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
+          <img src={logoJesusKing} />
         </SwiperSlide>
         <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
+          <img src={logoPibvm} />
         </SwiperSlide>
+
         <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
+          <img src={logoOnu} />
         </SwiperSlide>
+
         <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
+          <img src={controleEstoque} />
         </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-        </SwiperSlide>
+        
       </Swiper>
     </>
   );
