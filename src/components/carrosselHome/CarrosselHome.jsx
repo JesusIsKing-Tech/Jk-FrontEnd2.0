@@ -24,7 +24,6 @@ export default function App({ onSlideChange }) {
 
   const handleSlideChange = (swiper) => {
     const newIndex = swiper.realIndex;
-    console.log(newIndex);
     setActiveIndex(newIndex);
     if (onSlideChange) {
       onSlideChange(newIndex);
