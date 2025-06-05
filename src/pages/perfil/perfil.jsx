@@ -1,6 +1,6 @@
 import HeaderLogado from "../../components/headerLogado/headerLogado";
 import { FaEdit, FaSave, FaTimes, FaTrash, FaPlus } from 'react-icons/fa';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
     ProfileContainer,
@@ -15,6 +15,9 @@ import {
 } from './perfilStyle';
 
 import arroz from '../../assets/arroz.png'
+import { use } from "react";
+import api from "../../api";
+import semFoto from '../../assets/sem-foto.jpg';
 
 const initialData = {
     nome: "Kauá Vidal",
@@ -30,7 +33,7 @@ const initialData = {
         cidade: "Santo André",
         estado: "São Paulo"
     },
-    imageUrl: "https://www.pibvm.com.br/mt-content/uploads/2024/01/photo-from-junior-7.jpg"
+    imageUrl: semFoto // Use a default image if no profile picture is set
 };
 
 function Perfil() {
@@ -39,6 +42,28 @@ function Perfil() {
     const [editandoEndereco, setEditandoEndereco] = useState(false);
     const [dados, setDados] = useState(initialData);
     const [dadosOriginais, setDadosOriginais] = useState(initialData);
+
+    useEffect(() => {
+        async function fetchPerfil() {
+            try {
+                const response = await api.get('/usuarios/2')
+                const imagem = await api.get('/usuarios/1/foto-perfil')
+
+                console.log(response)
+                
+                
+                setDados(response.data);
+                setCestaBasica(response.data.cestaBasica);
+
+                console.log(dados)
+            } catch (error) {
+                console.error("Erro ao buscar perfil:", error);
+            }
+        }
+        fetchPerfil();
+    }, []);
+        
+    dados.imageUrl = dados.imageUrl || semFoto; // Ensure imageUrl is set
 
     const toggleCestaBasica = () => {
         if (editandoPerfil) {
@@ -92,7 +117,7 @@ function Perfil() {
             <ProfileContainer>
                 <Sidebar>
                     <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-around", marginTop: "50px" }} >
-                        <ProfileImage src={"https://www.pibvm.com.br/mt-content/uploads/2024/01/photo-from-junior-7.jpg"} alt="Profile" />
+                        <ProfileImage src={dados.imageUrl} alt="Profile" />
                     </div>
                     {editandoPerfil && (
                         <div style={{ display: "flex", justifyContent: "space-around", width: "80%",marginBottom:"30px" }}>

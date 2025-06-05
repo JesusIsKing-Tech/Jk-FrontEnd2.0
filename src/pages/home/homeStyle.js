@@ -325,3 +325,57 @@ export const ContainerIntegrante = styled.div`
         }
     }
     `;
+
+export const ContainerCarrossel2 = styled.div`
+
+
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    `;
+export const ContainerCarrossel2Content = styled.div`
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    gap: 5rem;
+
+    width: 70%;
+    height: 100%;
+
+    padding: 1rem;
+
+    margin: 1rem;
+
+
+    p{
+            font-family: "Roboto Condensed", serif;
+            font-size: 1.5rem;
+            color: black;
+            text-align: center;
+        }
+
+        img{
+            width: 20rem;
+            height: 20rem;
+            border-radius: 3%;
+            object-fit: cover;
+            margin: 0.3rem;
+        }
+
+    `;
+
+    export const ContainerCarrossel3 = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    border: 2px solid springgreen;
+    `;

@@ -1,35 +1,21 @@
 # Etapa 1: Build da aplicação
 FROM node:18 AS build
 
-# Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia os arquivos de dependências para o container
 COPY package.json package-lock.json ./
-
-# Instala as dependências
 RUN npm install
 
-# Copia o restante do código da aplicação para o container
 COPY . .
-
-# Executa o build da aplicação
 RUN npm run build
 
-# Etapa 2: Servir a aplicação
-FROM nginx:alpine
+# Etapa final: Apenas arquivos estáticos do build
+FROM alpine:latest
 
-# Remove o conteúdo padrão do Nginx
-RUN rm -rf /usr/share/nginx/html/*
+WORKDIR /app
 
-# Copia os arquivos do build para o diretório padrão do Nginx
-COPY --from=build /app/dist /usr/share/nginx/html
+# Copia apenas os arquivos do build para a imagem final
+COPY --from=build /app/dist /app
 
-# Copia o arquivo de configuração do Nginx (opcional)
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expõe a porta 80
-EXPOSE 80
-
-# Inicia o servidor Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Comando padrão: mantém o container rodando para facilitar o docker cp
+CMD ["sh", "-c", "echo 'Build concluído. Copie os arquivos de /app para seu Nginx.' && tail -f /dev/null"]

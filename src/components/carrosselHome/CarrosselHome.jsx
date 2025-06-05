@@ -38,7 +38,7 @@ export default function App({ onSlideChange }) {
         grabCursor={true}
         centeredSlides={true}
         slidesPerView={3}
-        initialSlide={0}
+        initialSlide={2}
         coverflowEffect={{
           rotate: 50,
           stretch: 0,
@@ -61,11 +61,6 @@ export default function App({ onSlideChange }) {
         <SwiperSlide>
           <img src={logoPibvm} />
         </SwiperSlide>
-
-        <SwiperSlide>
-          <img src={logoOnu} />
-        </SwiperSlide>
-
         <SwiperSlide>
           <img src={controleEstoque} />
         </SwiperSlide>
