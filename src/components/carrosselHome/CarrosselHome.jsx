@@ -56,13 +56,13 @@ export default function App({ onSlideChange }) {
         // slideActiveClass="active-slide"
       >
         <SwiperSlide>
-          <img src={logoJesusKing} />
+          <img src={logoJesusKing} alt="Jesus King logo" />
         </SwiperSlide>
         <SwiperSlide>
-          <img src={logoPibvm} />
+          <img src={logoPibvm} alt="PIBVM logo" />
         </SwiperSlide>
         <SwiperSlide>
-          <img src={controleEstoque} />
+          <img src={controleEstoque} alt="Controle Estoque image" />
         </SwiperSlide>
         
       </Swiper>
