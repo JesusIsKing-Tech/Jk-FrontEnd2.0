@@ -14,6 +14,9 @@ const GlobalStyles = createGlobalStyle`
         overflow-x: hidden;
 
     }
+    html{
+        scroll-behavior: smooth;
+    }
 `
 
 export default GlobalStyles;
