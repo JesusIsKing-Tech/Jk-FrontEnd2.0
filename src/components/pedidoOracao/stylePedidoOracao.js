@@ -25,7 +25,9 @@ export const Sidebar = styled.div`
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 `;
 
-export const RequestItem = styled.div`
+export const RequestItem = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'isSelected'
+})`
   padding: 15px;
   display: flex;
   align-items: center;
