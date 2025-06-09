@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Importing recharts components for the chart rendering
 import { ResponsiveContainer, BarChart, LineChart, XAxis, YAxis, Tooltip, Bar, Line } from "recharts";
@@ -8,11 +8,47 @@ import { ChartCard, TableCard, TableStyled, HeaderFamilia, BoxTroca, ChartsConta
 
 // Importing your filtering component
 import Filtro from "../../components/filtroDash/FiltroDash";
+import api from "../../api";
 
 function GraficosDash() {
     const [sortType, setSortType] = useState("name"); // Estado para filtro de famílias
+    const [registrations, setRegistrations] = useState([]);
 
-    const registrations = [
+    useEffect(() => {
+    async function fetchData() {
+        const response = await api.get("usuarios/usuarios-por-mes");
+
+        // Mapeamento para abreviações dos meses
+        const monthMap = {
+            janeiro: "Jan",
+            fevereiro: "Fev",
+            março: "Mar",
+            abril: "Abr",
+            maio: "Mai",
+            junho: "Jun",
+            julho: "Jul",
+            agosto: "Ago",
+            setembro: "Set",
+            outubro: "Out",
+            novembro: "Nov",
+            dezembro: "Dez"
+        };
+
+        // Transforma o objeto em array no formato desejado
+        const dataArray = Object.entries(response.data).map(([mes, quantidade]) => ({
+            month: monthMap[mes.toLowerCase()] || mes,
+            value: quantidade
+        }));
+
+        setRegistrations(dataArray);
+    }
+    fetchData();
+     const interval = setInterval(fetchData, 5000); // Atualiza a cada 10 segundos
+
+    return () => clearInterval(interval); // Limpa ao desmontar
+}, []);
+
+    const registrations2 = [
         { month: 'Jan', value: 12 },
         { month: 'Fev', value: 20 },
         { month: 'Mar', value: 16 },

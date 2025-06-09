@@ -32,11 +32,11 @@ export const RequestItem = styled.div`
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid #333;
-  background-color: ${(props) => (props.isSelected ? '#1565c0' : 'transparent')};
-  color: ${(props) => (props.isSelected ? '#ffffff' : '#ccc')};
-  font-weight: ${(props) => (props.isSelected ? 'bold' : 'normal')};
+  background-color: ${(props) => (props.$isSelected ? '#1565c0' : 'transparent')};
+  color: ${(props) => (props.$isSelected ? '#ffffff' : '#ccc')};
+  font-weight: ${(props) => (props.$isSelected ? 'bold' : 'normal')};
   &:hover {
-    background-color: ${(props) => (props.isSelected ? '#1e88e5' : '#333')};
+    background-color: ${(props) => (props.$isSelected ? '#1e88e5' : '#333')};
   }
 `;
 

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BoxTroca, Container, Sidebar, RequestItem, Details, Message, RequestTitle, RequestDetails, ContactInfo, ButtonGroup, ActionButton } from './stylePedidoOracao';
 import { FaEnvelope, FaPhone, FaPrayingHands, FaWhatsapp } from 'react-icons/fa';
+import api from '../../api';
+import Swal from 'sweetalert2';
 
-const prayerRequests = [
+const prayerRequests2 = [
   {
     id: 1,
     name: 'John Doe',
@@ -64,9 +66,67 @@ const prayerRequests = [
 
 function PedidoOracao() {
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const [prayerRequests, setPrayerRequests] = useState([]);
+
+  useEffect(() => {
+    async function fetchPrayerRequests() {
+      try {
+        const response = await api.get('/pedidos-oracao');
+        console.log(response.data);
+        
+        const mappedRequests = response.data.map(request => ({
+          id: request.id,
+          name: request.usuario.nome,
+          email: request.usuario.email,
+          phone: request.usuario.telefone,
+          details: request.descricao,
+        }));
+        setPrayerRequests(mappedRequests);
+      }catch (error) {
+        console.error("Erro ao buscar pedidos de oração:", error);
+      }
+    }
+    fetchPrayerRequests();
+
+    
+  }, []);
+
 
   const handleContactClick = (phone) => {
     window.open(`https://wa.me/${phone}`, '_blank');
+  };
+
+  const handlePrayClick = (id) => {
+    async function prayForRequest(id) {
+      try {
+        if (selectedRequest) {
+          await api.post(`/pedidos-oracao/${id}/orar`);
+          Swal.fire({
+            title: 'Oração Registrada',
+            text: `Você orou por ${selectedRequest.name}.`,
+            icon: 'success',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            // Remove o pedido orado da lista sem reload
+          setPrayerRequests(prev => prev.filter(request => request.id !== id));
+          setSelectedRequest(null); // Limpa seleção
+          });
+        } else {
+          alert('Por favor, selecione um pedido de oração.');
+        }
+      } catch (error) {
+        console.error("Erro ao registrar oração:", error);
+        Swal.fire({
+          title: 'Erro',
+          text: 'Não foi possível registrar sua oração. Tente novamente mais tarde.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+      }
+    }
+
+    prayForRequest(id);
+    window.reload
   };
 
   return (
@@ -93,7 +153,7 @@ function PedidoOracao() {
               </ContactInfo>
               <RequestDetails>{selectedRequest.details}</RequestDetails>
               <ButtonGroup>
-                <ActionButton><FaPrayingHands /> Orar</ActionButton>
+                <ActionButton onClick={()=>handlePrayClick(selectedRequest.id)}><FaPrayingHands /> Orar</ActionButton>
                 <ActionButton onClick={() => handleContactClick(selectedRequest.phone)}><FaWhatsapp /> Entrar em Contato</ActionButton>
               </ButtonGroup>
             </div>

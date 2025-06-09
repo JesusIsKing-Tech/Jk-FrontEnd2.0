@@ -27,7 +27,9 @@ export const Sidebar = styled.div`
   flex-direction: column;
 `
 
-export const RequestItem = styled.div`
+export const RequestItem = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'isSelected'
+})`
   padding: 15px;
   cursor: pointer;
   display: flex;
@@ -130,7 +132,9 @@ export const ButtonGroup = styled.div`
   border-top: 1px solid #333;
 `
 
-export const ActionButton = styled.button`
+export const ActionButton = styled.button.withConfig({
+  shouldForwardProp: (prop) => prop !== 'danger'
+})`
   padding: 12px 20px;
   border: none;
   border-radius: 6px;

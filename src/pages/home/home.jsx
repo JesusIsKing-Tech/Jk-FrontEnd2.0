@@ -54,7 +54,6 @@ function Home() {
             <ContainerConteudo>
               <SubTitulo>Seja bem-vindo ao nosso site!</SubTitulo>
               <Titulo>Quando estiver ao seu alcance, não deixe de fazer o bem a quem é devido.</Titulo>
-              <BotaoConheca >Conheça mais</BotaoConheca>
             </ContainerConteudo>
           </MainContainer>
         </Background>
