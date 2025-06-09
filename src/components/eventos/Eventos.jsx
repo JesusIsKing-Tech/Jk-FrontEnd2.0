@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BoxTroca, Container, Sidebar, RequestItem, Details, Message, RequestTitle,
-  EventImageContainer, EventImage, EventDescription, ButtonGroup, ActionButton, 
+  EventImageContainer, EventImage, EventDescription, ButtonGroup, ActionButton,
   EditInput, EditInputDate, Label, ImageUploadContainer, FormGrid, FormColumn,
   AddEventButton, NoEventsMessage, EventTimeInput, EventValueInput, FormSection,
   ImagePreview, ImageUploadButton, ImagePlaceholder, EventStatus
 } from './styleEventos';
 import { FaEdit, FaTrash, FaSave, FaArrowLeft, FaImage, FaPlus, FaCalendarAlt, FaMapMarkerAlt, FaClock, FaMoneyBillWave } from 'react-icons/fa';
+import api from '../../api';
+import EventFormGrid from './EventoFormGrid';
+import Swal from 'sweetalert2';
+import semImagem from '../../assets/sem-imagem.jpg';
 
 // Dados de exemplo
 const eventList = [
@@ -64,7 +68,7 @@ const eventList = [
 
 
 function Eventos() {
-  const [events, setEvents] = useState(eventList);
+  const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
@@ -73,11 +77,50 @@ function Eventos() {
     title: '',
     date: '',
     time: '',
-    location: '',
+    cep: '',
+    rua: '',
+    bairro: '',
+    localidade: '',
+    numero: '',
+    complemento: '',
     image: '',
     description: '',
-    value: ''
+    value: '',
+    file: null
   });
+
+  async function fetchEvents() {
+      try {
+        const response = await api.get('/postagem');
+        console.log('Eventos recebidos:', response.data);
+
+        const fetchedEvents = response.data.map(event => ({
+          id: event.id,
+          title: event.titulo,
+          date: event.data
+            ? new Date(event.data).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
+            : '',
+          time: event.horaEvento ? event.horaEvento.slice(0, 5) : '',
+          location: event.local || event.enderecoEvento?.logradouro || '', // Adicione location
+          rua: event.endereco?.logradouro || '',
+          bairro: event.endereco?.bairro || '',
+          localidade: event.endereco?.localidade || '',
+          numero: event.endereco?.numero || '',
+          complemento: event.endereco?.complemento || '',
+          cep: event.endereco?.cep || '',
+          image: event.imagem || '',
+          description: event.descricao,
+          value: event.valor || ''
+        }));
+
+        console.log('Eventos formatados:', fetchedEvents);
+
+        setEvents(fetchedEvents);
+
+      } catch (error) {
+        console.error('Erro ao buscar eventos:', error);
+      }
+    }
 
   // Iniciar edição de evento
   const handleEditClick = () => {
@@ -92,32 +135,97 @@ function Eventos() {
     setIsEditing(false);
     setSelectedEvent(null);
     setEditableEvent({
-      id: Date.now(), // ID temporário
+      id: '',
       title: '',
+      description: '',
+      location: '',
+      cep: '',
+      rua: '',
+      bairro: '',
+      numero: '',
+      complemento: '',
+      localidade: '',
       date: '',
       time: '',
-      location: '',
+      value: '',
       image: '',
-      description: '',
-      value: ''
+      file: null,
     });
   };
 
   // Salvar evento (novo ou editado)
-  const handleSaveClick = () => {
-    if (isAdding) {
-      // Adicionar novo evento
-      setEvents([...events, editableEvent]);
-      setSelectedEvent(editableEvent);
-    } else {
-      // Atualizar evento existente
-      setEvents(events.map(event => 
-        event.id === editableEvent.id ? editableEvent : event
-      ));
-      setSelectedEvent(editableEvent);
+  const handleSaveClick = async () => {
+    const enderecoEvento = {
+      cep: editableEvent.cep,
+      logradouro: editableEvent.rua,
+      numero: editableEvent.numero,
+      complemento: editableEvent.complemento,
+      bairro: editableEvent.bairro,
+      localidade: editableEvent.localidade,
+      uf: editableEvent.uf
+    };
+
+    const valorNumerico = editableEvent.value
+      ? Number(
+        String(editableEvent.value)
+          .replace(/\s/g, '')
+          .replace('R$', '')
+          .replace(/\./g, '')
+          .replace(',', '.')
+      )
+      : 0;
+
+    const formData = new FormData();
+    formData.append("titulo", editableEvent.title);
+    formData.append("data", editableEvent.date);
+    formData.append("descricao", editableEvent.description);
+    formData.append("valor", valorNumerico);
+    formData.append("hora", editableEvent.time);
+    formData.append(
+      "enderecoEvento",
+      new Blob([JSON.stringify(enderecoEvento)], { type: "application/json" })
+    );
+    if (editableEvent.file) {
+      formData.append("file", editableEvent.file);
     }
-    setIsEditing(false);
-    setIsAdding(false);
+
+    try {
+      if (isAdding) {
+        await api.post('/postagem', formData, {
+          headers: { "Content-Type": "multipart/form-data" }
+        });
+        Swal.fire({
+          icon: 'success',
+          title: 'Evento Adicionado',
+          text: 'O evento foi adicionado com sucesso!',
+          confirmButtonText: 'OK',
+        });
+        fetchEvents(); // Atualiza a lista de eventos após adicionar
+      } else {
+        // Atualização (PUT)
+        await api.put(`/postagem/${editableEvent.id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" }
+        });
+        Swal.fire({
+          icon: 'success',
+          title: 'Evento Atualizado',
+          text: 'O evento foi atualizado com sucesso!',
+          confirmButtonText: 'OK',
+        });
+      }
+      setIsEditing(false);
+      setIsAdding(false);
+      // Atualize a lista de eventos se necessário
+      fetchEvents();
+    } catch (error) {
+      console.error("Erro ao salvar evento:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro ao salvar evento',
+        text: error.response?.data?.message || 'Ocorreu um erro ao salvar o evento.',
+        confirmButtonText: 'OK',
+      });
+    }
   };
 
   // Cancelar edição/adição
@@ -127,11 +235,41 @@ function Eventos() {
   };
 
   // Excluir evento
-  const handleDeleteEvent = () => {
-    if (window.confirm('Tem certeza que deseja excluir este evento?')) {
-      setEvents(events.filter(event => event.id !== selectedEvent.id));
+  const handleDeleteEvent = async () => {
+    const result = await Swal.fire({
+    title: 'Tem certeza?',
+    text: 'Você realmente deseja excluir este evento?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sim, excluir',
+    cancelButtonText: 'Cancelar'
+  });
+
+    if (result.isConfirmed) {
+      try {
+        await api.delete(`/postagem/${selectedEvent.id}`);
+        console.log("Evento excluído:", selectedEvent.id);
+        Swal.fire({
+          icon: 'success',
+          title: 'Evento Excluído',
+          text: 'O evento foi excluído com sucesso!',
+          confirmButtonText: 'OK',
+        });
+      } catch (error) {
+        console.error('Erro ao excluir evento:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro ao excluir evento',
+          text: error.response?.data?.message || 'Ocorreu um erro ao excluir o evento.',
+          confirmButtonText: 'OK',
+        });
+      }
       setSelectedEvent(null);
+      fetchEvents(); // Atualiza a lista de eventos após exclusão
     }
+
   };
 
   // Atualizar campos do evento
@@ -165,8 +303,12 @@ function Eventos() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setEditableEvent((prev) => ({ ...prev, image: imageUrl }));
+      const imageUrl = URL.createObjectURL(file); // só para preview
+      setEditableEvent((prev) => ({
+        ...prev,
+        image: imageUrl, // preview (opcional)
+        file: file       // arquivo real para envio!
+      }));
     }
   };
 
@@ -178,12 +320,35 @@ function Eventos() {
   // Verificar se o formulário está válido
   const isFormValid = () => {
     return (
-      editableEvent.title.trim() !== '' &&
-      editableEvent.date.trim() !== '' &&
-      editableEvent.time.trim() !== '' &&
-      editableEvent.location.trim() !== '' &&
-      editableEvent.description.trim() !== ''
+      (editableEvent.title || '').trim() !== '' &&
+      (editableEvent.date || '').trim() !== '' &&
+      (editableEvent.time || '').trim() !== '' &&
+      (editableEvent.description || '').trim() !== ''
     );
+  };
+
+  // Retornar lista de eventos
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  // Renderizar imagem eventos
+  const fetchImage = async (event) => {
+
+    try {
+      const response = await api.get(`/postagem/foto-evento/${event.id}`, {
+        responseType: 'blob'
+      });
+      if (!response.data || response.data.size === 0) {
+        console.warn('Nenhuma imagem encontrada para o evento:', event.id);
+        return semImagem; // Retorna uma imagem padrão se não houver imagem
+      }
+      const imageUrl = URL.createObjectURL(response.data);
+      return imageUrl;
+    } catch (error) {
+      console.error('Erro ao buscar imagem do evento:', error);
+    }
+    return semImagem; // Retorna uma imagem padrão se falhar
   };
 
   return (
@@ -193,16 +358,21 @@ function Eventos() {
           <AddEventButton onClick={handleAddClick}>
             <FaPlus /> Novo Evento
           </AddEventButton>
-          
+
           {events.length > 0 ? (
             events.map((event) => (
               <RequestItem
                 key={event.id}
                 isSelected={selectedEvent && selectedEvent.id === event.id}
-                onClick={() => {
-                  setSelectedEvent(event);
+                onClick={async () => {
+                  let imageUrl = '';
+                  if (!event.image) {
+                    imageUrl = await fetchImage(event);
+                  }
+                  setSelectedEvent({ ...event, image: imageUrl || event.image });
                   setIsEditing(false);
                   setIsAdding(false);
+                  console.log("Evento selecionado:", event);
                 }}
               >
                 {event.title}
@@ -214,118 +384,26 @@ function Eventos() {
             </NoEventsMessage>
           )}
         </Sidebar>
-        
+
         <Details>
           {isAdding || isEditing ? (
             // Formulário de edição/adição
             <FormSection>
               <h2>{isAdding ? 'Adicionar Novo Evento' : 'Editar Evento'}</h2>
-              
-              <FormGrid>
-                <FormColumn>
-                  <div>
-                    <Label>Título do Evento: *</Label>
-                    <EditInput
-                      name="title"
-                      value={editableEvent.title}
-                      onChange={handleChange}
-                      placeholder="Ex: Show de Rock"
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label>Descrição: *</Label>
-                    <EditInput
-                      as="textarea"
-                      rows="4"
-                      name="description"
-                      value={editableEvent.description}
-                      onChange={handleChange}
-                      placeholder="Descreva os detalhes do evento"
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label>Local: *</Label>
-                    <EditInput
-                      name="location"
-                      value={editableEvent.location}
-                      onChange={handleChange}
-                      placeholder="Ex: Centro de Convenções"
-                      icon={<FaMapMarkerAlt />}
-                    />
-                  </div>
-                </FormColumn>
-                
-                <FormColumn>
-                  <div>
-                    <Label>Data: *</Label>
-                    <EditInputDate
-                      name="date"
-                      value={editableEvent.date}
-                      onChange={handleChange}
-                      placeholder="DD/MM/AAAA"
-                      icon={<FaCalendarAlt />}
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label>Hora: *</Label>
-                    <EventTimeInput
-                      name="time"
-                      value={editableEvent.time}
-                      onChange={handleChange}
-                      placeholder="Ex: 19:30"
-                      icon={<FaClock />}
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label>Valor: (opcional)</Label>
-                    <EventValueInput
-                      name="value"
-                      value={editableEvent.value}
-                      onChange={handleChange}
-                      placeholder="Ex: R$ 50,00"
-                      icon={<FaMoneyBillWave />}
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label>Imagem do Evento:</Label>
-                    {editableEvent.image ? (
-                      <ImagePreview>
-                        <EventImage src={editableEvent.image || "/placeholder.svg"} alt="Prévia do evento" />
-                        <ActionButton onClick={handleImageRemove} danger>
-                          <FaTrash /> Remover
-                        </ActionButton>
-                      </ImagePreview>
-                    ) : (
-                      <ImageUploadContainer>
-                        <ImagePlaceholder>
-                          <FaImage size={40} />
-                          <p>Clique para adicionar uma imagem</p>
-                        </ImagePlaceholder>
-                        <ImageUploadButton>
-                          <FaImage /> Selecionar Imagem
-                          <input 
-                            type="file" 
-                            accept="image/*" 
-                            onChange={handleImageChange} 
-                          />
-                        </ImageUploadButton>
-                      </ImageUploadContainer>
-                    )}
-                  </div>
-                </FormColumn>
-              </FormGrid>
-              
+
+              <EventFormGrid
+                editableEvent={editableEvent}
+                handleChange={handleChange}
+                handleImageChange={handleImageChange}
+                handleImageRemove={handleImageRemove}
+              />
+
               <ButtonGroup>
                 <ActionButton onClick={handleCancelEdit}>
                   <FaArrowLeft /> Cancelar
                 </ActionButton>
-                <ActionButton 
-                  onClick={handleSaveClick} 
+                <ActionButton
+                  onClick={handleSaveClick}
                   disabled={!isFormValid()}
                   style={{
                     backgroundColor: isFormValid() ? "green" : "#555",
@@ -341,7 +419,7 @@ function Eventos() {
             <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
               <div>
                 <RequestTitle>{selectedEvent.title}</RequestTitle>
-                
+
                 <EventStatus>
                   <div>
                     <FaCalendarAlt /> <span>{selectedEvent.date}</span>
@@ -350,7 +428,7 @@ function Eventos() {
                     <FaClock /> <span>{selectedEvent.time}</span>
                   </div>
                   <div>
-                    <FaMapMarkerAlt /> <span>{selectedEvent.location}</span>
+                    <FaMapMarkerAlt /> <span>{selectedEvent.rua + " - " + selectedEvent.bairro}</span>
                   </div>
                   {selectedEvent.value && (
                     <div>
@@ -358,16 +436,16 @@ function Eventos() {
                     </div>
                   )}
                 </EventStatus>
-                
+
                 {selectedEvent.image && (
                   <EventImageContainer>
                     <EventImage src={selectedEvent.image} alt={selectedEvent.title} />
                   </EventImageContainer>
                 )}
-                
+
                 <EventDescription>{selectedEvent.description}</EventDescription>
               </div>
-              
+
               <ButtonGroup>
                 <ActionButton onClick={handleEditClick}>
                   <FaEdit /> Editar
@@ -380,8 +458,8 @@ function Eventos() {
           ) : (
             // Mensagem quando nenhum evento está selecionado
             <Message>
-              {events.length > 0 
-                ? "Selecione um evento para ver mais detalhes" 
+              {events.length > 0
+                ? "Selecione um evento para ver mais detalhes"
                 : "Clique em 'Novo Evento' para começar a adicionar eventos"}
             </Message>
           )}

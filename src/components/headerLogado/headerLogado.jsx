@@ -1,12 +1,21 @@
+import { useNavigate } from "react-router-dom";
 import { HeaderContainer, NavLinks, NavLink, LogoutButton, ProfileSection, HeaderWrapper,Perfil } from "./styleHeaderLogado";
 import { FaSignOutAlt, FaUser } from "react-icons/fa";
 
 function HeaderLogado() {
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.clear()
+        navigate("/");
+    }
+
     return (
         <HeaderContainer>
             <HeaderWrapper>
                 {/* Botão de Sair */}
-                <LogoutButton>
+                <LogoutButton onClick={handleLogout}>
                     <FaSignOutAlt /> SAIR
                 </LogoutButton>
 

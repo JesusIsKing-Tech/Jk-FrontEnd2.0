@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   BoxTroca, Container, Sidebar, RequestItem, Details, Message,
   RequestTitle, ContactInfo, AddressInfo, ButtonGroup, ActionButton,
-  AddressCard,ActionButtonNao
+  AddressCard, ActionButtonNao
 } from './styleEndereco';
 import { FaEnvelope, FaPhone } from 'react-icons/fa';
 import api from '../../api';
@@ -137,15 +137,17 @@ function Endereco() {
   const [addressRequests, setAddressRequests] = useState([]);
 
   useEffect(() => {
-    async function addressRequests(){
+    async function addressRequests() {
       try {
-        const response = await api.get("/enderecos/chamados");  
+        const response = await api.get("/enderecos/chamados");
+
+        const requests = Array.isArray(response.data) ? response.data : [];
 
         console.log(response.data);
 
         console.warn("Pedidos de alteração de endereço:", response.data);
 
-        const mappedRequests = response.data.map(request => ({
+        const mappedRequests = requests.map(request => ({
           id: request.id,
           name: request.usuario.nome,
           email: request.usuario.email,
@@ -162,11 +164,11 @@ function Endereco() {
           oldAddress: {
             cep: request.usuario.endereco.cep,
             rua: request.usuario.endereco.logradouro,
-            numero:  request.usuario.endereco.numero,
+            numero: request.usuario.endereco.numero,
             complemento: request.usuario.endereco.complemento,
             bairro: request.usuario.endereco.bairro,
             cidade: request.usuario.endereco.localidade,
-            estado:   request.usuario.endereco.uf,
+            estado: request.usuario.endereco.uf,
           },
         }));
 
@@ -208,12 +210,12 @@ function Endereco() {
             icon: 'success',
             confirmButtonText: 'OK',
           }).then(() => {
-          setAddressRequests(prev =>
-            prev.filter(request => request.id !== id)
-          );
-          setSelectedRequest(null); // Limpa seleção
+            setAddressRequests(prev =>
+              prev.filter(request => request.id !== id)
+            );
+            setSelectedRequest(null); // Limpa seleção
           });
-        } 
+        }
       } catch (error) {
         console.error("Erro ao aceitar pedido de alteração de endereço:", error);
         Swal.fire({
@@ -243,7 +245,7 @@ function Endereco() {
             );
             setSelectedRequest(null); // Limpa seleção
           });
-        } 
+        }
       } catch (error) {
         console.error("Erro ao recusar pedido de alteração de endereço:", error);
         Swal.fire({
@@ -265,7 +267,7 @@ function Endereco() {
           {addressRequests.map((request) => (
             <RequestItem
               key={request.id}
-              isSelected={selectedRequest && selectedRequest.id === request.id}
+              $isSelected={selectedRequest && selectedRequest.id === request.id}
               onClick={() => setSelectedRequest(request)}
             >
               {request.name}
@@ -285,8 +287,8 @@ function Endereco() {
                 {renderAddress('Endereço Novo', selectedRequest.newAddress)}
               </AddressInfo>
               <ButtonGroup>
-                <ActionButton onClick={ ()=>approveRequest(selectedRequest.id) }>Aceitar</ActionButton>
-                <ActionButtonNao onClick={()=>rejectRequest(selectedRequest.id)}>Recusar</ActionButtonNao>
+                <ActionButton onClick={() => approveRequest(selectedRequest.id)}>Aceitar</ActionButton>
+                <ActionButtonNao onClick={() => rejectRequest(selectedRequest.id)}>Recusar</ActionButtonNao>
               </ButtonGroup>
             </div>
           ) : (

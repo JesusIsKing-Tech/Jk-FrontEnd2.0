@@ -46,8 +46,11 @@ function Perfil() {
     useEffect(() => {
         async function fetchPerfil() {
             try {
-                const response = await api.get('/usuarios/2')
-                const imagem = await api.get('/usuarios/1/foto-perfil')
+
+                const userId = localStorage.getItem('userId')
+
+                const response = await api.get(`/usuarios/${userId}`);
+                const imagem = await api.get(`/usuarios/${userId}/foto-perfil`)
 
                 console.log(response)
                 
